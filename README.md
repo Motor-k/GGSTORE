@@ -1,5 +1,5 @@
 # GGSTORE
-**Realizado por Gustavo Bule(20202463), Gabriel Sezaltino(20202518)**
+**Realizado por Gustavo Bule, Gabriel Sezaltino**
 REQUER PYTHON 3.10 ou superior
 
 # tipo de base de dados:
