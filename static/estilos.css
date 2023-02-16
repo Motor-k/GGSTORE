@@ -1,0 +1,66 @@
+/* Div que está a form*/
+#divLogin_Register{
+
+  border-radius: 100px;
+  border-color: black;
+  outline: 3px solid;
+  box-shadow: 8px 8px;
+
+}
+
+/*Campo de erro no html*/
+#void1{
+
+  color: red;
+  text-decoration: underline;
+
+}
+
+
+.firstdiv {
+  background-color: rgba(138, 111, 111, 0.250);
+
+  
+}
+
+#flexCheckDefault {
+
+ top: -35%;
+
+}
+
+.cursive{
+
+  font-family: cursive;
+}
+
+/*Style dos inputs*/
+input {
+  box-shadow: 2px 4px 25px rgba(0, 0, 0, .1);
+  height: 35px;
+  border: none;
+  margin-left:.5rem;
+  padding-left: 10px;
+  background-color: rgba(240, 240, 240);
+  flex:1 0;
+}
+
+/*Style das forms*/
+form{
+position: relative;
+width: 85%;
+left:   5%;
+top: 3%;
+}
+
+/*Style do body*/
+body {
+  background-image:url("\image.png");
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  background-size: cover;
+ }
+
+

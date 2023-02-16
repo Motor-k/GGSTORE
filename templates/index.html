@@ -1,0 +1,192 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Main_Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='w3.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css') }}">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <!-- All variables are intialized here because it is not possible/unecessarly dificult to template external js files -->
+  <script type="text/javascript">
+    //varaible declaration
+    var selection = "1";
+    var ct = [];
+    // var data
+    var user = "{{ session['nome'] }}";
+    var conta = {{ session.id }};
+    var url = "127.0.0.1:5000";
+    var game_page = 0;
+    var comment_page = 0;
+    var game_data;
+    var comments_data;
+    var operations_data;
+    var money_spent=0;
+    var transaction_qt=0;
+    var evaluation_qt=0;
+  </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="{{ url_for('static', filename='crudops.js') }}"></script>
+  <script src="{{ url_for('static', filename='menus.js') }}"></script>
+  <!-- intialized here because it is not possible/unecessarly dificult to template external css files -->
+  <style>
+    /*web app created by Gustavo Bule && Gabriel Sezaltino/
+    /*English code comments: Gustavo Bule*/
+    /*Comentarios no código em Portugues: Gabriel Sezaltino*/
+    html {
+    background: url("{{ url_for('static', filename='game.jpg') }}") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    }
+    html,body,h1,h2,h3,h4,h5 {font-family: "Arial";font-size: 27px;}
+    .spc{width:16.666%;}
+    .sq {display: block; float: left; width: 15%; height: 15%; background-image: url("{{ url_for('static', filename='dash.png') }}");background-size: cover;background-position: center;background-repeat:no-repeat;margin-right: 10px;}
+    .ts{padding-left:5px;padding-bottom:40px;color:red;} /*Table overlay spacing*/
+    .ts2{padding-left:110px;padding-bottom:35px;color:purple;} /*Table overlay 2 spacing*/
+    .dq {width:200px;height:250px;background-size:200px 250px;background-repeat:no-repeat;} /*Image generation*/
+    .games {margin:0px 16px 16px 0px;width:100px;height:35px;font-size:15px}/*custom css for games list*/
+  </style>
+  </head><body class="" style="opacity:0.8;">
+  <script>
+  var now = new Date().getTime();
+  </script>
+  
+  <!-- Top container -->
+  <div class="w3-container w3-top w3-large w3-padding" style="z-index:4;background-color:black;">
+    <button class="BigButton w3-text-white w3-padding-2 " style="font-size:27px!important;background-color:transparent;border:2px solid black;" onclick="w3_open();"><i class="fa fa-bars"></i> &nbsp;Menu</button>
+    <span class="w3-right" style="font-size:27px!important;"><i class="fa fa-chevron-left w3-hover-text-grey w3-btn" >&nbsp; <a class="terminar" href="{{ url_for('logout') }}">Terminar sessão</a></i>&nbsp; <i class="ca fa w3-hover-text-grey w3-btn">{{ session.nome }}</i> </span>
+  </div>
+  
+  <!-- Sidenav/menu -->
+  <nav class="w3-sidenav w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;font-size:27px;" id="mySidenav"><br>
+    <div class="w3-container w3-row">
+      <a class="w3-dark-grey" style="text-align:center;width:100%;padding:0px">GNG Store</a>
+      <img src="{{ url_for('static', filename='gamer.gif') }}" class="" style='width:100%;height:200px'></img>
+    </div>
+    <br>
+    <a href="" class="w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
+    <a class="w3-padding home clk"><i class="fa fa-home fa-fw"></i>&nbsp; Dashboard</a>
+    {% if session.role == 'user' %}
+    <a class="w3-padding history clk"><i class="fa fa-money fa-fw"></i>&nbsp; Compras</a>
+    <a class="w3-padding history_comment clk"><i class="fa fa-comment fa-fw"></i>&nbsp; Comentarios</a>
+    <a class="w3-padding update_cash clk"><i class="fa fa-credit-card fa-fw"></i>&nbsp; Carregar Saldo</a>
+    {% elif session.role == 'dev'%}
+    <a class="w3-padding insert_game clk"><i class="fa fa-plus fa-fw"></i>&nbsp; Inserir Jogo</a>
+    <a class="w3-padding edit_game clk"><i class="fa fa-plus fa-fw"></i>&nbsp; Editar Jogo</a>
+    <a class="w3-padding delete_game clk"><i class="fa fa-plus fa-fw"></i>&nbsp; Apagar Jogo</a>
+    {% endif %}
+    <a class="w3-padding store clk"><i class="fas fa-store fa-fw fa-fw"></i>&nbsp; Loja</a>
+    <a class="w3-padding pdf clk"><i class=" fa fa-file w3-text-gray fa-fw"></i>&nbsp; Relatório </a>
+    <button class="w3-btn operacao w3-padding w3-hover-text-grey w3-hide"><i class="fa fa-bars"></i> teste</button>
+    <br><br>
+  </nav>
+  
+  <!-- Overlay effect when opening sidenav on small screens -->
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+  
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  
+  <div id="ajub" class="w3-row-padding w3-margin-bottom" >
+  </div>
+  
+  <div class="w3-row-padding " style="margin-top:32px!important;">
+      <div class="w3-quarter">
+      <!--on click it will show current money -->
+        <div class="w3-container bigButton w3-black w3-text-white w3-padding-16 w3-border-black" style="border: 7px solid;">
+          <div class="w3-left"><i class="fas fa-wallet w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3 id=cash>0</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Saldo Disponivel</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+      <!--Valor restante-->
+        <div class="w3-container w3-black w3-padding-16 w3-border-black" style="border: 7px solid;">
+          <div class="w3-left"><i class="fa fa-coins w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3 id=money_spent>0</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Valor gasto</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+      <!--detalhes-->
+        <div class="w3-container w3-black w3-padding-16 w3-border-black" style="border: 7px solid;">
+          <div class="w3-left"><i class="fas fa-gamepad w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3 id=game_count>0</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Jogos Comprados</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+      <!--Number of evaluations-->
+        <div class="w3-container w3-black w3-padding-16 w3-border-black" style="border: 7px solid;">
+          <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3 id=rating_count>0</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Avaliações feitas</h4>
+        </div>
+      </div>
+    </div>
+  
+  
+  <!--user account module (needs to be reworked)-->
+    <div id="ajin" class="w3-half w3-padding">
+          
+      <h5 class="w3-black w3-padding-left">Informações de conta</h5>
+      <table id="us_conta" class="w3-table w3-black "> 
+          <tbody>
+            <tr>
+            <td><i class="fa fa-user"></i> &emsp; Nome:</td><td><a class="info-n">Default</a></td>
+            </tr>
+            <tr>
+            <td><i class="fa fa-money"></i>&emsp; Saldo:</td><td><a class="info-m">Default</a></td>
+            </tr>
+            <tr>
+            <td><i class="fa fa-calendar"></i> &emsp; Data atual:</td><td><a class="info-d">Default</a></td>
+            </tr>
+          </tbody>
+      </table>
+          
+    </div><!--end of container-->
+  <!--end of charts module-->
+  
+  <!--user recent actions-->
+  
+        <div id="ajun" class="w3-half w3-padding">
+          <h5 class="big w3-black w3-padding-left">Operações efectuadas:  </h5>
+          <table id="operacoes" class="w3-table w3-black "> 
+            <tbody><tr>
+            <td><i class="fa fa-user w3-green w3-padding-tiny"></i></td><td>Sem notificações</td>
+            </tr></tbody>
+          </table>
+        </div> <!--end of AJN (ajun) module-->
+      </div><!--end of row padding-->
+    </div><!--end of container-->
+  
+  
+  <!--Multi purpose modal-->
+  
+    <div id="id01" class="w3-modal" style="padding-top:3.7%!important;opacity:1!important;">
+      <div class="w3-modal-content w3-card-4" >
+        <header class="w3-container w3-black" style="position:center">
+          <span onclick="document.getElementById('id01').style.display='none'" class="w3-closebtn">&times;</span>
+          <h2 class="modal_head"></h2>
+        </header>
+        <div class="w3-container modal_subtitle" style="border-bottom:1px solid;">
+          
+        </div>
+          
+        <div class="w3-container w3-white modal_body">
+  
+        </div>
+      </div>
+    </div>
+  </body></html>
